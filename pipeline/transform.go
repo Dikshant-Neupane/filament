@@ -24,7 +24,8 @@ func (p *Pipeline) planFor(resource string, supplied rowmodel.Schema) (*transfor
 	}
 	schema := supplied.Clone()
 	schema.Resource = resource
-	plan, err := transform.Compile(p.transform, schema)
+	plan, err := transform.Compile(p.transform, schema,
+		transform.WithContracts(p.contracts), transform.WithInvoker(p.invoker(resource)))
 	if err != nil {
 		return nil, fmt.Errorf("pipeline: %w", err)
 	}
